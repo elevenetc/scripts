@@ -17,5 +17,5 @@ function net-get-ip {
 }
 
 function net-get-app-by-port {
-	lsof -i :${argv}[1]
+	lsof -i :${argv}
 }
