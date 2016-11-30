@@ -7,3 +7,4 @@ source ${scriptsPath}/net/net.sh
 source ${scriptsPath}/utils/utils.sh
 source ${scriptsPath}/pm2/pm2.sh
 source ${scriptsPath}/osx/osx.sh
+source ${scriptsPath}/fs/fs.sh
