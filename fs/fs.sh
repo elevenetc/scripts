@@ -18,4 +18,5 @@ function fs-zip-dit-with-pass {
     srcDir=$1
     zipFile="${srcDir}.zip"
     zip -er ${zipFile} ${srcDir}
+    finish-with-success
 }
