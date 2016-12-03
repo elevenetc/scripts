@@ -8,5 +8,6 @@ source ${scriptsPath}/utils/utils.sh
 source ${scriptsPath}/pm2/pm2.sh
 source ${scriptsPath}/osx/osx.sh
 source ${scriptsPath}/fs/fs.sh
+source ${scriptsPath}/mysql/mysql.sh
 source ${scriptsPath}/messages/errors.sh
 source ${scriptsPath}/messages/success.sh
