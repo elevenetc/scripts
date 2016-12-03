@@ -4,19 +4,22 @@ function fs-list-by-date {
     ls -halt
 }
 
-function fs-zip-dit-with-pass {
+function fs-zip-dir-with-pass {
 
-    RED='\033[0;31m'
-    NC='\033[0m'
-
-    if [ -z "$1" ]
-      then
-        message-error-no-args "source dir"
-        return
-    fi
+    validate-param "source dir" $1
 
     srcDir=$1
     zipFile="${srcDir}.zip"
-    zip -er ${zipFile} ${srcDir}
+    zip -er ${zipFile} ${srcDir} -x "*.DS_Store"
+    finish-with-success
+}
+
+function fs-zip-dir {
+
+    validate-param "source dir" $1
+
+    srcDir=$1
+    zipFile="${srcDir}.zip"
+    zip -r ${zipFile} ${srcDir} -x "*.DS_Store"
     finish-with-success
 }
