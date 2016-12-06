@@ -11,3 +11,12 @@ function git-ac {
 function git-branch {
 	git for-each-ref --sort=committerdate refs/heads/ --format='%(HEAD) %(color:yellow)%(refname:short)%(color:reset) - %(color:red)%(objectname:short)%(color:reset) - %(contents:subject) - %(authorname) (%(color:green)%(committerdate:relative)%(color:reset))'
 }
+
+function git-init-submodules {
+    git submodule update --init --recursive
+}
+
+function git-clone-with-submodules {
+    validate-param "repository path" $1
+    git clone --recursive -j8 $1
+}
