@@ -19,3 +19,9 @@ function net-get-ip {
 function net-get-app-by-port {
 	lsof -i :${argv}
 }
+
+function net-check-if-port-opened {
+    validate-param "host" $1
+    validate-param "port" $1
+    telnet $1 $2
+}
