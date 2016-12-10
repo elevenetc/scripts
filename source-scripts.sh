@@ -13,3 +13,4 @@ source ${scriptsPath}/ssh/ssh.sh
 source ${scriptsPath}/messages/errors.sh
 source ${scriptsPath}/messages/success.sh
 source ${scriptsPath}/pm/pm.sh
+source ${scriptsPath}/edit/edit.sh
