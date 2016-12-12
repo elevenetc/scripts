@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 scriptsPath=${argv}
-source ${scriptsPath}/android/android.sh
+source ${scriptsPath}/android/and.sh
 source ${scriptsPath}/git/git.sh
 source ${scriptsPath}/net/net.sh
 source ${scriptsPath}/utils/utils.sh
