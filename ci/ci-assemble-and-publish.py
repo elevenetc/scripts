@@ -4,10 +4,10 @@ import os
 
 sb.Popen(['pwd'], shell=True)
 
-branchListResult = sb.Popen(['git', 'branch', '-a'], stdout=sb.PIPE)
-branches = branchListResult.stdout.readlines()
+branches_result = sb.Popen(['git', 'branch', '-a'], stdout=sb.PIPE)
+branches = branches_result.stdout.readlines()
 
-if branchListResult.poll() != 0:
+if branches_result.poll() != 0:
     print 'error with branch'
     exit()
 
@@ -17,30 +17,35 @@ if ret != 0:
     print 'error with fetch', ret
     exit()
 
+
+def is_valid_name(branch_name):
+    if branch_name.find('*') != -1:
+        return False
+
+    if branch_name.find('HEAD') != -1:
+        return False
+
+    if branch_name.find('remotes/origin/') != 0:
+        return False
+
+    return True
+
+
 for branch in branches:
 
     branch = branch.strip()
 
-    if branch.find('*') != -1:
-        continue
-
-    if branch.find('HEAD') != -1:
-        continue
-
-    if branch.find('remotes/origin/') != 0:
+    if not is_valid_name(branch):
         continue
 
     branch = branch.replace("remotes/origin/", "")
 
-    cmdCheckout = 'git checkout ' + branch
     print '=====================================================: ' + branch
 
-    if 0 != os.system(cmdCheckout):
+    if 0 != os.system('git checkout ' + branch):
         print 'error'
         exit()
 
-    cmdMerge = 'git merge origin/' + branch
-
-    if 0 != os.system(cmdMerge):
+    if 0 != os.system('git merge origin/' + branch):
         print 'error'
         exit()
