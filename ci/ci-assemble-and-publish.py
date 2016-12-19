@@ -8,13 +8,13 @@ branches_result = sb.Popen(['git', 'branch', '-a'], stdout=sb.PIPE)
 branches = branches_result.stdout.readlines()
 
 if branches_result.poll() != 0:
-    print 'error with branch'
+    print ('error with branch')
     exit()
 
-ret = os.system('git fetch --all')
+fetch_result = os.system('git fetch --all')
 
-if ret != 0:
-    print 'error with fetch', ret
+if fetch_result != 0:
+    print ('error with fetch', fetch_result)
     exit()
 
 
@@ -38,14 +38,14 @@ for branch in branches:
     if not is_valid_name(branch):
         continue
 
-    branch = branch.replace("remotes/origin/", "")
+    branch = branch.replace('remotes/origin/', '')
 
-    print '=====================================================: ' + branch
+    print ('=====================================================: ' + branch)
 
     if 0 != os.system('git checkout ' + branch):
-        print 'error'
+        print ('error')
         exit()
 
     if 0 != os.system('git merge origin/' + branch):
-        print 'error'
+        print ('error')
         exit()
