@@ -10,3 +10,8 @@ function and-adb-screen-pull {
 function and-adb-restart {
     adb kill-server; adb start-server
 }
+
+function and-adb-uninstall-app {
+    validate-param "package name" $1
+    adb shell pm uninstall ${1}
+}
