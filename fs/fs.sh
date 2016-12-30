@@ -23,3 +23,8 @@ function fs-zip-dir {
     zip -r ${zipFile} ${srcDir} -x "*.DS_Store"
     finish-with-success
 }
+
+function fs-find {
+    validate-param "File name" $1
+    find ./ -name $1
+}
