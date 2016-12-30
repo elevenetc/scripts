@@ -28,3 +28,8 @@ function fs-find {
     validate-param "File name" $1
     find ./ -name $1
 }
+
+function fs-find-and-delete {
+    validate-param "File name" $1
+    find ./ -name $1 -delete
+}
