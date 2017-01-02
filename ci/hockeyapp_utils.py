@@ -1,3 +1,6 @@
+import general_utils
+import build_utils
+import git_utils
 import json
 import os
 import subprocess as sb
@@ -27,66 +30,7 @@ def filter_android_apps_by_name(apps, app_name):
     return result
 
 
-def current_branch_name():
-    branch_cmd = sb.Popen('git rev-parse --abbrev-ref HEAD'.split(), stdout=sb.PIPE)
-    return branch_cmd.stdout.readlines()[0].replace('\n', '')
-
-
-def is_valid_name(branch_name):
-    if branch_name.find('*') != -1:
-        return False
-
-    if branch_name.find('HEAD') != -1:
-        return False
-
-    if branch_name.find('remotes/origin/') != 0:
-        return False
-
-    return True
-
-
-def checkout_all_remote_branches():
-    result = []
-    branches_result = sb.Popen(['git', 'branch', '-a'], stdout=sb.PIPE)
-    branches = branches_result.stdout.readlines()
-
-    if branches_result.poll() != 0:
-        print ('error with branch')
-        return result
-
-    fetch_result = os.system('git fetch --all')
-
-    if fetch_result != 0:
-        print ('error with fetch', fetch_result)
-        return result
-
-    for branch in branches:
-
-        branch = branch.strip()
-
-        if not is_valid_name(branch):
-            continue
-
-        branch = branch.replace('remotes/origin/', '')
-        result.append(branch)
-
-        if 0 != os.system('git checkout ' + branch):
-            print ('error')
-            exit()
-
-        if 0 != os.system('git merge origin/' + branch):
-            print ('error')
-            exit()
-
-    return result
-
-
-# created app should have titles:
-# "Hello - production"
-# "Hello - release/v1.1"
-# "Hello - feature/JIRA-222-description"
-# "Hello - fix/JIRA-222-description"
-def filter_not_created_apps(app_name, apps, all_branches):
+def filter_branches(all_branches):
     result = []
     i = len(all_branches) - 1
 
@@ -98,15 +42,30 @@ def filter_not_created_apps(app_name, apps, all_branches):
         for prefix in prefixes:
             # check if branch has proper prefix
             if branch.find(prefix) == 0:
-                # check if app created for this branch
-                created = False
-                for app in apps:
-                    if app.title == get_title(app_name, branch):
-                        created = True
-                        break
+                result.append(branch)
 
-                if not created:
-                    result.append(branch)
+    return result
+
+
+# created app should have titles:
+# "Hello - production"
+# "Hello - release/v1.1"
+# "Hello - feature/JIRA-222-description"
+# "Hello - fix/JIRA-222-description"
+def filter_not_created_apps(app_name, apps, all_branches):
+    result = []
+
+    branches = filter_branches(all_branches)
+
+    for branch in branches:
+        created = False
+        for app in apps:
+            if app.title == general_utils.get_title(app_name, branch):
+                created = True
+                break
+
+        if not created:
+            result.append(branch)
 
     return result
 
@@ -114,7 +73,7 @@ def filter_not_created_apps(app_name, apps, all_branches):
 def create_app(app_name, branch, hockey_token):
     url = 'https://rink.hockeyapp.net/api/2/apps/new'
     params = {
-        'title': get_title(app_name, branch),
+        'title': general_utils.get_title(app_name, branch),
         'bundle_identifier': app_name,
         'platform': 'Android',
         'release_type': 1
@@ -125,6 +84,9 @@ def create_app(app_name, branch, hockey_token):
 
 
 def load_versions(app, hockey_token):
+
+    print '# load_versions'
+
     pub_id = app.public_identifier
     url = 'https://rink.hockeyapp.net/api/2/apps/' + pub_id + '/app_versions'
     headers = {'X-HockeyAppToken': hockey_token}
@@ -133,9 +95,12 @@ def load_versions(app, hockey_token):
 
 
 def load_or_create_app(app_name, branch, hockey_token):
+
+    print '# load_or_create_app'
+
     apps = load_all_apps(hockey_token)
     apps = filter_android_apps_by_name(apps, app_name)
-    app = is_app_created(app_name, branch, apps)
+    app = general_utils.is_app_created(app_name, branch, apps)
 
     if app is None:
         app = create_app(app_name, branch, hockey_token)
@@ -143,22 +108,53 @@ def load_or_create_app(app_name, branch, hockey_token):
     return app
 
 
-def assemble(build_type):
-    branch_cmd = sb.Popen(('./gradlew assemble' + build_type.capitalize()).split(), stdout=sb.PIPE)
-    return branch_cmd.stdout.readlines()
+def create_version(app, branch, hockey_token):
+
+    url = 'https://rink.hockeyapp.net/api/2/apps/' + app.public_identifier + '/app_versions/new'
+    headers = {'X-HockeyAppToken': hockey_token}
+    params = {
+        'bundle_version': branch
+    }
+
+    response = requests.get(url, headers=headers, params=params)
+    version = json.loads(response.content, object_hook=lambda d: Namespace(**d))
+    return version
 
 
-def is_app_created(app_name, branch, apps):
-    for app in apps:
-        if app.title == get_title(app_name, branch):
-            return app
-    return None
+def upload_version(app, branch, commit_hash, path_to_app_file, hockey_token):
+
+    version = create_version(app, branch, hockey_token)
+
+    print '# upload_version'
+
+    url = 'https://rink.hockeyapp.net/api/2/apps/' + app.public_identifier + '/app_versions/upload'
+    headers = {'X-HockeyAppToken': hockey_token}
+    params = {
+        'status': 2,
+        'notify': 1,
+        'notes': commit_hash,
+        'notes_type': 0,
+        'ipa': path_to_app_file
+    }
+
+    response = requests.get(url, headers=headers, params=params)
+    if url == 'ddd':
+        print 'hello'
 
 
-def get_last_commit_hash(branch):
-    hash = sb.Popen(('git log -n 1 ' + branch + ' --pretty=format:"%H"').split(), stdout=sb.PIPE)
-    return hash.stdout.readlines()[0].replace('"', '')
+def upload_last_version_if_needed(app, branch, path_to_app_file, hockey_token):
 
+    print '# upload_last_version_if_needed'
 
-def get_title(app_name, branch):
-    return app_name + ' - ' + branch
+    versions = load_versions(app, hockey_token)
+    commit_hash = git_utils.get_last_commit_hash(branch)
+    need_to_upload = True
+    for version in versions:
+        if version.notes == commit_hash:
+            need_to_upload = False
+            break
+
+    if need_to_upload:
+        build_utils.assemble('release')
+        upload_version(app, branch, commit_hash, path_to_app_file, hockey_token)
+
