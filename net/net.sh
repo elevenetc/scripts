@@ -17,7 +17,7 @@ function net-get-ip {
 }
 
 function net-get-app-by-port {
-	lsof -i :${argv}
+	lsof -i :$1
 }
 
 function net-check-if-port-opened {
