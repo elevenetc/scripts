@@ -1,9 +1,11 @@
-import subprocess as sb
-import general_utils
 import os
+import re
+import subprocess as sb
+
+import general_utils
 
 
-def get_last_commit_hash(branch):
+def get_last_commit_sha(branch):
     hash = sb.Popen(('git log -n 1 ' + branch + ' --pretty=format:"%H"').split(), stdout=sb.PIPE)
     return hash.stdout.readlines()[0].replace('"', '')
 
@@ -46,4 +48,16 @@ def checkout_all_remote_branches():
             print ('error')
             exit()
 
+    return result
+
+
+def get_ordered_map_of_commits(amount_commits):
+    result = []
+    cmd = 'git log -n ' + str(amount_commits) + ' --pretty=format:"%H:%s"'
+    commits = sb.Popen(cmd.split(), stdout=sb.PIPE).stdout.readlines()
+    for commit in commits:
+        commit = commit.replace('"', '')
+        sha = re.search('(.*)(?=:)', commit).group(0)
+        message = re.search('(?<=:)(.*)', commit).group(0)
+        result.append({'sha': sha, 'message': message})
     return result

@@ -1,6 +1,6 @@
 import general_utils
 import build_utils
-import git_utils
+import git_utils as git
 import json
 import os
 import subprocess as sb
@@ -58,16 +58,19 @@ def filter_not_created_apps(app_name, apps, all_branches):
     branches = filter_branches(all_branches)
 
     for branch in branches:
-        created = False
-        for app in apps:
-            if app.title == general_utils.get_title(app_name, branch):
-                created = True
-                break
+        created = is_app_created_for_branch(app_name, apps, branch)
 
         if not created:
             result.append(branch)
 
     return result
+
+
+def is_app_created_for_branch(app_name, apps, branch):
+    for app in apps:
+        if app.title == general_utils.get_title(app_name, branch):
+            return True
+    return False
 
 
 def create_app(app_name, branch, hockey_token):
@@ -121,24 +124,27 @@ def create_version(app, branch, hockey_token):
     return version
 
 
-def upload_version(app, branch, commit_hash, path_to_app_file, hockey_token):
-
-    version = create_version(app, branch, hockey_token)
+def create_and_upload_version(app, branch, versions, last_commit_sha, path_to_app_file, hockey_token):
 
     print '# upload_version'
+
+    new_version = create_version(app, branch, hockey_token)
+
+    # if len(versions) > 0:
+
 
     url = 'https://rink.hockeyapp.net/api/2/apps/' + app.public_identifier + '/app_versions/upload'
     headers = {'X-HockeyAppToken': hockey_token}
     params = {
         'status': 2,
         'notify': 1,
-        'notes': commit_hash,
-        'notes_type': 0,
-        'ipa': path_to_app_file
+        'notes': last_commit_sha,
+        'notes_type': 0
     }
+    files = {'ipa': open(path_to_app_file, 'rb')}
 
-    response = requests.get(url, headers=headers, params=params)
-    if url == 'ddd':
+    response = requests.post(url, headers=headers, params=params, files=files)
+    if response == 'ddd':
         print 'hello'
 
 
@@ -147,14 +153,24 @@ def upload_last_version_if_needed(app, branch, path_to_app_file, hockey_token):
     print '# upload_last_version_if_needed'
 
     versions = load_versions(app, hockey_token)
-    commit_hash = git_utils.get_last_commit_hash(branch)
+    last_commit_sha = git.get_last_commit_sha(branch)
     need_to_upload = True
     for version in versions:
-        if version.notes == commit_hash:
+        if last_commit_sha not in version.notes:
             need_to_upload = False
             break
 
     if need_to_upload:
         build_utils.assemble('release')
-        upload_version(app, branch, commit_hash, path_to_app_file, hockey_token)
+        create_and_upload_version(app, branch, versions, last_commit_sha, path_to_app_file, hockey_token)
 
+
+def create_notes(versions, last_commit_sha):
+    result = ''
+    commits = git.get_ordered_map_of_commits(5)
+    last_mentioned_sha = None
+
+    for version in versions:
+        # find sha from notes
+
+    return result
