@@ -15,3 +15,12 @@ function and-adb-uninstall-app {
     validate-param "package name" $1
     adb shell pm uninstall ${1}
 }
+
+function and-is-app-installed {
+    validate-param "package name" $1
+    if [ -z $(adb shell pm list packages | grep ${1}) ]; then
+        green-prefix-message "${1}" " is not installed"
+    else
+        green-prefix-message "${1}" " is installed"
+    fi
+}
