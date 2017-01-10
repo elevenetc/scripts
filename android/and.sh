@@ -24,3 +24,7 @@ function and-is-app-installed {
         green-prefix-message "${1}" " is installed"
     fi
 }
+
+function and-sys-version {
+    adb shell getprop ro.build.version.release
+}
