@@ -60,4 +60,5 @@ def get_ordered_map_of_commits(amount_commits):
         sha = re.search('(.*)(?=:)', commit).group(0)
         message = re.search('(?<=:)(.*)', commit).group(0)
         result.append({'sha': sha, 'message': message})
+    result.reverse()
     return result

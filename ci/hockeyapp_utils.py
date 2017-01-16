@@ -2,6 +2,7 @@ import general_utils
 import build_utils
 import git_utils as git
 import json
+import re
 import os
 import subprocess as sb
 from argparse import Namespace
@@ -138,7 +139,7 @@ def create_and_upload_version(app, branch, versions, last_commit_sha, path_to_ap
     params = {
         'status': 2,
         'notify': 1,
-        'notes': last_commit_sha,
+        'notes': create_notes(versions, last_commit_sha),
         'notes_type': 0
     }
     files = {'ipa': open(path_to_app_file, 'rb')}
@@ -165,12 +166,37 @@ def upload_last_version_if_needed(app, branch, path_to_app_file, hockey_token):
         create_and_upload_version(app, branch, versions, last_commit_sha, path_to_app_file, hockey_token)
 
 
+# Note should look about like this
+# - commit message a
+# - commit message b
+# sha:
 def create_notes(versions, last_commit_sha):
     result = ''
-    commits = git.get_ordered_map_of_commits(5)
+    commits = git.get_ordered_map_of_commits(100)
     last_mentioned_sha = None
 
-    for version in versions:
-        # find sha from notes
+    commits.reverse()
+
+    reach_last_sha = False
+
+    for commit in commits:
+        result += commit.message
+        result += '\n'
+
+        for version in versions:
+            sha = find_sha_in_note(version.notes)
+            if sha == commit.sha:
+                reach_last_sha = True
+                break
+
+        if reach_last_sha:
+            break
+
+    result += '(sha:' + last_commit_sha + ')'
 
     return result
+
+
+# note sample - '(sha:xxx)'
+def find_sha_in_note(note):
+    return re.search('(?<=(\(sha:))(.*)(?=\))', note).group(0)
