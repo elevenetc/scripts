@@ -6,8 +6,9 @@ import general_utils
 
 
 def get_last_commit_sha(branch):
-    hash = sb.Popen(('git log -n 1 ' + branch + ' --pretty=format:"%H"').split(), stdout=sb.PIPE)
-    return hash.stdout.readlines()[0].replace('"', '')
+    hash = sb.Popen(('git log -n 1 --pretty=format:"%H"').split(), stdout=sb.PIPE)
+    lines = hash.stdout.readlines()[0]
+    return lines.replace('"', '')
 
 
 def current_branch_name():
