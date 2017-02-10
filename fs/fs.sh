@@ -33,3 +33,5 @@ function fs-find-and-delete {
     validate-param "File name" $1
     find ./ -name $1 -delete
 }
+
+alias ll="ls -halt"
