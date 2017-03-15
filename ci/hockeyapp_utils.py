@@ -95,7 +95,9 @@ def load_versions(app, hockey_token):
     url = 'https://rink.hockeyapp.net/api/2/apps/' + pub_id + '/app_versions'
     headers = {'X-HockeyAppToken': hockey_token}
     response = requests.get(url, headers=headers)
-    return json.loads(response.content, object_hook=lambda d: Namespace(**d)).app_versions
+    # return json.loads(response.content, object_hook=lambda d: Namespace(**d)).app_versions
+    response = json.loads(response.content, object_hook=lambda d: Namespace(**d))
+    return response.app_versions
 
 
 def load_or_create_app(app_name, branch, hockey_token):
