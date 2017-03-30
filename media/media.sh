@@ -17,3 +17,8 @@ function media-compress-and-send {
     media-jpgs-to-pdf
     uuencode ./images.pdf | mail -s "{$subj}" "{$address}"
 }
+
+function media-merge-pdfs {
+    mergedFileName=$1
+    /System/Library/Automator/Combine\ PDF\ Pages.action/Contents/Resources/join.py --output ${mergedFileName}.pdf *.pdf
+}
