@@ -1,9 +1,16 @@
 #!/usr/bin/env bash
 
 function and-adb-screen-pull {
-	adb shell screencap -p /sdcard/temp.png
-	adb pull /sdcard/temp.png ~/
-	adb shell rm /sdcard/temp.png
+
+    dir=~/android-screenshots/
+    name=$(date).png
+    name=${name// /_}
+
+    mkdir -p ${dir}
+	adb shell screencap -p /sdcard/${name}
+	adb pull /sdcard/${name} ${dir}
+	adb shell rm /sdcard/${name}
+	echo ${dir}${name}
 	finish-with-success
 }
 
