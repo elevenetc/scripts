@@ -1,6 +1,13 @@
 #!/usr/bin/env bash
+
+function media-compress-images {
+    validate-param "width" $1
+    width=$1
+    sips --resampleWidth ${width} *
+}
+
 function media-compress-images-to-700 {
-    sips --resampleWidth 700 *
+    media-compress-images 700
 }
 
 # brew install imagemagick
