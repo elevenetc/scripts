@@ -1,0 +1,16 @@
+# custom IntelliJ IDEA VM options
+-server
+-Xms1024m
+-Xmx4096m
+-XX:MaxPermSize=1024m
+-XX:ReservedCodeCacheSize=1024m
+-XX:+UseCompressedOops
+-XX:+UseCodeCacheFlushing
+-XX:+UseConcMarkSweepGC
+-XX:+AggressiveOpts
+-XX:+CMSClassUnloadingEnabled
+-XX:+CMSIncrementalMode
+-XX:+CMSIncrementalPacing
+-XX:CMSIncrementalDutyCycleMin=0
+-XX:-TraceClassUnloading
+-XX:+TieredCompilation
