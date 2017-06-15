@@ -20,3 +20,9 @@ function git-clone-with-submodules {
     validate-param "repository path" $1
     git clone --recursive -j8 $1
 }
+
+function git-fix-upstream {
+    validate-param "upstream branch" $1
+    branchName=$1
+    git branch --set-upstream-to=origin/${branchName} ${branchName}
+}
