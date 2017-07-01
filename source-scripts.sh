@@ -16,3 +16,4 @@ source ${scriptsPath}/pm/pm.sh
 source ${scriptsPath}/edit/edit.sh
 source ${scriptsPath}/media/media.sh
 source ${scriptsPath}/gradle/gradle.sh
+source ${scriptsPath}/paths/paths.sh
