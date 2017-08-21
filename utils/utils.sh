@@ -20,6 +20,14 @@ function utils-is-linux {
     fi
 }
 
+function set-env-var {
+    validate-param "name" $1
+    validate-param "value" $2
+    name=$1
+    value=$2
+    launchctl setenv ${name} ${value}
+}
+
 # Samples
 
 #function checkOsSample {
