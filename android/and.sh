@@ -40,3 +40,16 @@ function and-kill-app {
     validate-param "package name" $1
     adb shell am force-stop ${1}
 }
+
+function and-get-android-id {
+    adb shell content query --uri content://settings/secure --where "name=\'android_id\'"
+}
+
+function and-delete-android-id {
+    adb shell content delete --uri content://settings/secure --where "name=\'android_id\'"
+}
+
+function and-set-android-id {
+    validate-param "AndroidID" $1
+    adb shell content insert --uri content://settings/secure --bind name:s:android_id --bind value:s:${1}
+}
