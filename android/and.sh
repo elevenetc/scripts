@@ -35,3 +35,8 @@ function and-is-app-installed {
 function and-sys-version {
     adb shell getprop ro.build.version.release
 }
+
+function and-kill-app {
+    validate-param "package name" $1
+    adb shell am force-stop ${1}
+}
