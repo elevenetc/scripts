@@ -31,3 +31,19 @@ function getCurrentDateCol(datesRange) {
     }
     return -1
 }
+
+function fillRangeBackground(range, color){
+    var sheet = SpreadsheetApp.getActiveSpreadsheet();
+    var row = sheet.getRange(datesRange);
+    var backgrounds = row.getBackgrounds();
+    for(var i = 0; i < backgrounds.length; i++){
+        backgrounds[0][i] = color;
+    }
+    sheet.getRange(range).setBackgrounds(backgrounds);
+}
+
+function isGroupTopicRow(rowIndex){
+    var sheet = SpreadsheetApp.getActiveSpreadsheet();
+    var row = sheet.getRange(topicGroupCol + '' + rowIndex);
+    return !row.isBlank()
+}
