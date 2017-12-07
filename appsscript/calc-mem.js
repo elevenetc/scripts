@@ -1,3 +1,9 @@
+var topRow = 6;
+var bottomRow = 159;
+var leftCol = 'AI';
+var rightCol = 'BQ';
+var datesRange = 'G4:BQ4';
+
 function calcMem(rangeValue) {
 
     var sheet = SpreadsheetApp.getActiveSpreadsheet();
@@ -7,6 +13,7 @@ function calcMem(rangeValue) {
     var repeatColor = '#ffeca8';
     var workedColor = '#d6f9ca';
     var emptyColor = '#ffffff';
+    var deadlineColor = '#ff0000';
 
 
     var row = sheet.getRange(rangeValue);
@@ -19,7 +26,10 @@ function calcMem(rangeValue) {
     var backs = row.getBackgrounds();
     var values = row.getValues();
 
-    for (c = cellsCount - 1; c >= 0; c--) {
+    var currentDateCell = getCurrentDateCol(datesRange);
+    var deadlined = false;
+
+    for (var c = cellsCount - 1; c >= 0; c--) {
         var cell = row.getCell(1, c + 1);
         var value = values[0][c];
 
@@ -36,13 +46,16 @@ function calcMem(rangeValue) {
 
     weight = Math.ceil(aCount - bCount / 2 - cCount);
 
-    for (c = cellsCount - 1; c >= 0; c--) {
+    var repeatCell;
+    var lastWorkedCell;
+
+    for (c = cellsCount - 1; c >= 0; c--) {//find last filled cell
         var cell = row.getCell(1, c + 1);
 
         if (!cell.isBlank()) {
 
+
             var value = values[0][c];
-            var repeatCell = -10000;
 
             if (value === 'C') {
                 repeatCell = c + 1
@@ -50,37 +63,45 @@ function calcMem(rangeValue) {
                 repeatCell = c + 2 + weight
             } else if (value === 'A') {
                 repeatCell = c + 3 + weight
+            } else {
+                //invalid value
+                continue
             }
 
-            if (repeatCell !== -10000) {
-                if (repeatCell <= c) repeatCell = c + 1;
-                backs[0][repeatCell] = repeatColor
-            }
+            if (repeatCell <= c) repeatCell = c + 1;
+            backs[0][repeatCell] = repeatColor;
+
+            deadlined = repeatCell < currentDateCell;
+            lastWorkedCell = c;
 
             break;
         }
     }
 
-    sheet.getRange(rangeValue).setBackgrounds(backs)
+    if (deadlined) {
+        for (var i = repeatCell; i <= currentDateCell; i++) {
+            backs[0][i] = deadlineColor
+        }
+    }
+
+    sheet.getRange(rangeValue).setBackgrounds(backs);
 }
 
 function test() {
-    var testRow = 33;
-    calcMem('G' + testRow + ':BQ' + testRow)
+    calcMem(leftCol + topRow + ':' + rightCol + topRow)
 }
 
 function fillAll() {
-    for (var i = 6; i <= 143; i++) {
-        var range = 'G' + i + ':BQ' + i;
+    for (var r = topRow; r <= bottomRow; r++) {
+        var range = leftCol + r + ':' + rightCol + r;
         calcMem(range)
     }
 }
 
 function onEdit(e) {
-    var sheet = SpreadsheetApp.getActiveSheet()
-    var activeCell = sheet.getActiveCell()
-    var col = activeCell.getColumn()
-    var row = activeCell.getRow()
-    var range = 'G' + row + ':BQ' + row
+    var sheet = SpreadsheetApp.getActiveSheet();
+    var activeCell = sheet.getActiveCell();
+    var row = activeCell.getRow();
+    var range = leftCol + row + ':' + rightCol + row;
     calcMem(range)
 }
