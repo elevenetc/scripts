@@ -5,6 +5,7 @@ var rightCol = 'BQ';
 var datesRange = 'G4:BQ4';
 
 var repeatColor = '#ffeca8';
+var repeatAfterFailColor = '#FF8E00';
 var workedColor = '#d6f9ca';
 var emptyColor = '#ffffff';
 var deadlineColor = '#ff0000';
@@ -61,20 +62,22 @@ function calcMem(rangeValue, row) {
 
 
                 var value = values[0][c];
+                var lastIsFailed = false;
 
                 if (value === 'C') {
-                    repeatCell = c + 1
+                    repeatCell = c + 1;
+                    lastIsFailed = true;
                 } else if (value === 'B') {
-                    repeatCell = c + 2 + weight
+                    repeatCell = c + 2 + weight;
                 } else if (value === 'A') {
-                    repeatCell = c + 3 + weight
+                    repeatCell = c + 3 + weight;
                 } else {
                     //invalid value
-                    continue
+                    continue;
                 }
 
                 if (repeatCell <= c) repeatCell = c + 1;
-                backs[0][repeatCell] = repeatColor;
+                backs[0][repeatCell] = lastIsFailed ? repeatAfterFailColor : repeatColor;
 
                 deadlined = repeatCell < currentDateCell;
                 lastWorkedCell = c;
