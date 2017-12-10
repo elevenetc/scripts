@@ -101,8 +101,24 @@ function test() {
 }
 
 function fillAll() {
-    for (var r = topRow; r <= bottomRow; r++) {
-        var range = leftCol + r + ':' + rightCol + r;
+    fill(topRow, bottomRow, leftCol, rightCol);
+}
+
+function getLastTopicRow(){
+    var sheet = SpreadsheetApp.getActiveSheet();
+    var topicsCol = sheet.getRange('B5:B');
+    var topics = topicsCol.getValues();
+    for(var i = topics.length - 1; i >= 0; i--){
+        if(topics[i][0] != ''){
+            return i;
+        }
+    }
+    return -1;
+}
+
+function fill(top, bottom, left, right){
+    for (var r = top; r <= bottom; r++) {
+        var range = left + r + ':' + right + r;
         calcMem(range, r)
     }
 }
@@ -113,4 +129,11 @@ function onEdit(e) {
     var row = activeCell.getRow();
     var range = leftCol + row + ':' + rightCol + row;
     calcMem(range, row)
+}
+
+function onOpen(e) {
+    var lastTopicRow = getLastTopicRow()
+    if(lastTopicRow != -1){
+        fill(topRow, lastTopicRow + 4, leftCol, rightCol);
+    }
 }
