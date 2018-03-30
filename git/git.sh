@@ -30,3 +30,7 @@ function git-fix-upstream {
     branchName=$1
     git branch --set-upstream-to=origin/${branchName} ${branchName}
 }
+
+function git-commit-hash {
+    git rev-parse --short HEAD
+}
