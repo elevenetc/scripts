@@ -18,3 +18,4 @@ source ${scriptsPath}/media/media.sh
 source ${scriptsPath}/gradle/gradle.sh
 source ${scriptsPath}/paths/paths.sh
 source ${scriptsPath}/system/system.sh
+source ${scriptsPath}/sims/sims.sh
