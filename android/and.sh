@@ -53,3 +53,9 @@ function and-set-android-id {
     validate-param "AndroidID" $1
     adb shell content insert --uri content://settings/secure --bind name:s:android_id --bind value:s:${1}
 }
+
+function adb-pull-prefs {
+    validate-param "package name" $1
+    validate-param "prefs xml file name" $2
+    adb exec-out run-as ${1} cat /data/data/${1}/shared_prefs/${2}.xml
+}
