@@ -48,3 +48,5 @@ crashlytics-build.properties
 fabric.properties
 /.idea/
 /*/local-run.py
+
+.DS_Store
