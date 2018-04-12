@@ -7,4 +7,5 @@ function format-json {
 
 function format-json-clipboard {
     pbpaste | python -mjson.tool | pbcopy
+    echo "${GREEN}Formatted result is in clipboard.${NC}"
 }
