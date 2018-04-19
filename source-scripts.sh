@@ -22,3 +22,6 @@ source ${scriptsPath}/sims/sims.sh
 source ${scriptsPath}/format/format.sh
 
 alias media-imgs-to-video="python ${scriptsPath}/media/media-imgs-to-video.py"
+
+alias git-log="python ${scriptsPath}/git/git-log.py"
+alias git-branch-name="python ${scriptsPath}/git/git-branch-name.py"

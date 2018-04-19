@@ -1,6 +1,5 @@
 import subprocess as sb
 
-
-def get_branch_name():
+if __name__ == '__main__':
     branch_name_cmd = sb.Popen('git rev-parse --symbolic-full-name --abbrev-ref HEAD'.split(), stdout=sb.PIPE)
-    return branch_name_cmd.stdout.readlines()[0].replace('\n', '')
+    print branch_name_cmd.stdout.readlines()[0].replace('\n', '')
