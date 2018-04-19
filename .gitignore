@@ -50,3 +50,5 @@ fabric.properties
 /*/local-run.py
 
 .DS_Store
+
+/venv
