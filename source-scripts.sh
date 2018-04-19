@@ -20,3 +20,5 @@ source ${scriptsPath}/paths/paths.sh
 source ${scriptsPath}/system/system.sh
 source ${scriptsPath}/sims/sims.sh
 source ${scriptsPath}/format/format.sh
+
+alias media-imgs-to-video="python ${scriptsPath}/media/media-imgs-to-video.py"
