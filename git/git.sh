@@ -30,3 +30,7 @@ function git-fix-upstream {
 function git-commit-hash {
     git rev-parse --short HEAD
 }
+
+function git-branch {
+    git branch --sort=committerdate
+}
