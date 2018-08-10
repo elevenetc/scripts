@@ -79,3 +79,7 @@ function adb-pull-screen-xml {
     rm window_dump.xml
     open screen-layout.xml
 }
+
+function adb-packages {
+    adb shell 'pm list packages -f' | sed -e 's/.*=//' | sort
+}
