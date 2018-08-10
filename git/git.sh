@@ -34,3 +34,8 @@ function git-commit-hash {
 function git-branch {
     git branch --sort=committerdate
 }
+
+function git-search-all-branches {
+    validate-param "search query" $1
+    git grep ${branchName} $(git rev-list --all)
+}
