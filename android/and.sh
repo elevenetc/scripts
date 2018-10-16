@@ -83,3 +83,14 @@ function adb-pull-screen-xml {
 function adb-packages {
     adb shell 'pm list packages -f' | sed -e 's/.*=//' | sort
 }
+
+function adb-ip {
+    adb shell ip route | awk '{print $9}'
+}
+
+function adb-connect-to-wifi {
+    ip="$(adb shell ip route | awk '{print $9}')"
+    port=5555
+    adb tcpip ${port}
+    adb connect ${ip}:${port}
+}
