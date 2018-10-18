@@ -20,8 +20,9 @@ source ${scriptsPath}/paths/paths.sh
 source ${scriptsPath}/system/system.sh
 source ${scriptsPath}/sims/sims.sh
 source ${scriptsPath}/format/format.sh
+source ${scriptsPath}/dev/dev.sh
 
-alias media-imgs-to-video="python ${scriptsPath}/media/media-imgs-to-video.py"
+source $HOME/.bash_profile
 
-alias git-log="python ${scriptsPath}/git/git-log.py"
-alias git-branch-name="python ${scriptsPath}/git/git-branch-name.py"
+alias media-mov-to-mkv="python ${scriptsPath}/media/media-mov-to-mkv.py"
+alias fs-find-and-rename="python ${scriptsPath}/fs/fs-find-and-rename.py"
