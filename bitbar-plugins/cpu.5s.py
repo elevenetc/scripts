@@ -4,15 +4,6 @@
 
 import psutil
 
-# print("cpu:" + str(psutil.cpu_percent()))
-# print(psutil.cpu_times())
-# print(psutil.cpu_stats())
-# print(psutil.cpu_times_percent())
-# print(psutil.cpu_count())
-# print(psutil.cpu_freq())
-#
-# print ('\n')
-
 count = psutil.cpu_count()
 samples = 3
 
