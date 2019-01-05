@@ -35,7 +35,16 @@ function git-branch {
     git branch --sort=committerdate
 }
 
+# https://stackoverflow.com/questions/2928584/how-to-grep-search-committed-code-in-the-git-history
 function git-search-all-branches {
     validate-param "search query" $1
     git grep ${branchName} $(git rev-list --all)
+}
+
+function git-log {
+    git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
+}
+
+function git-current-branch-name {
+    git rev-parse --symbolic-full-name --abbrev-ref HEAD
 }
