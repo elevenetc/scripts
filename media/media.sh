@@ -29,3 +29,7 @@ function media-merge-pdfs {
     mergedFileName=$1
     /System/Library/Automator/Combine\ PDF\ Pages.action/Contents/Resources/join.py --output ${mergedFileName}.pdf *.pdf
 }
+
+function media-jpg-to-mp4 {
+    ffmpeg -framerate 1 -pattern_type glob -i '*.jpg' -c:v libx264 -r 30 -pix_fmt yuv420p out.mp4
+}
