@@ -94,3 +94,7 @@ function adb-connect-to-wifi {
     adb tcpip ${port}
     adb connect ${ip}:${port}
 }
+
+function android-target-sdk-version {
+    aapt list -a $1 | grep targetSdkVersion | grep -o '....$' | awk '{print $1+0}'
+}
