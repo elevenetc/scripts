@@ -22,6 +22,7 @@ source ${scriptsPath}/sims/sims.sh
 source ${scriptsPath}/format/format.sh
 source ${scriptsPath}/dev/dev.sh
 source ${scriptsPath}/docker/docker.sh
+source ${scriptsPath}/aws/aws.sh
 
 source $HOME/.bash_profile
 
