@@ -98,3 +98,7 @@ function adb-connect-to-wifi {
 function android-target-sdk-version {
     aapt list -a $1 | grep targetSdkVersion | grep -o '....$' | awk '{print $1+0}'
 }
+
+function android-open-apk-dir {
+    find . -name "apk" | xargs open
+}
