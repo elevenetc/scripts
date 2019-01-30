@@ -102,3 +102,42 @@ function android-target-sdk-version {
 function android-open-apk-dir {
     find . -name "apk" | xargs open
 }
+
+function android-sdk-list-of-available-tools {
+    sdkmanager --list
+}
+
+function android-sdk-install {
+    validate-param "tool to install" $1
+    sdkmanager $1
+}
+
+function android-sdk-update {
+    android update sdk --no-ui --all
+}
+
+function android-sdk-avds-created {
+    avdmanager list avd
+}
+
+function android-sdk-avds-available {
+    avdmanager list
+}
+
+function android-sdk-create-avd {
+    validate-param "name (without spaces)" $1
+    validate-param "package (see android-sdk-list-of-available-tools)" $2
+    validate-param "device id (like 10, see android-sdk-avds-available)" $3
+
+    avdmanager create avd --name "{$1}" --package "{$2}" --device $3
+}
+
+function android-sdk-run-emulator {
+    validate-param "emulator name" $1
+    emulator -avd $1
+}
+
+function android-sdk-delete-avd {
+    validate-param "emulator name" $1
+    avdmanager delete avd -n "{$1}"
+}
