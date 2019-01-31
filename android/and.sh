@@ -141,3 +141,8 @@ function android-sdk-delete-avd {
     validate-param "emulator name" $1
     avdmanager delete avd -n "{$1}"
 }
+
+function android-kill-avd {
+    validate-param "device name, like emulator-5554" $1
+    adb -s $1 emu kill
+}
