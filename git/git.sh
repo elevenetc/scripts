@@ -48,3 +48,8 @@ function git-log {
 function git-current-branch-name {
     git rev-parse --symbolic-full-name --abbrev-ref HEAD
 }
+
+function git-squash {
+    validate-param "commits to be squashed" $1
+    git reset --soft HEAD~${1}
+}
