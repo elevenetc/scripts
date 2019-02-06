@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+# https://developer.atlassian.com/server/bamboo/bamboo-rest-resources/
+
 function bamboo-rest-get-plans() {
     validate-param "user name" $1
     validate-param "password" $2
