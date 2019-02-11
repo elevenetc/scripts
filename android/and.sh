@@ -103,6 +103,10 @@ function android-open-apk-dir {
     find . -name "apk" | xargs open
 }
 
+function android-open-spoon-report {
+    find . -name "index.html" | grep "spoon" | xargs open
+}
+
 function android-sdk-list-of-available-tools {
     sdkmanager --list
 }
