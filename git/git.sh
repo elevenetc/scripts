@@ -32,7 +32,7 @@ function git-commit-hash {
 }
 
 function git-branch {
-    git branch --sort=committerdate
+    for k in `git branch | sed s/^..//`; do echo -e `git log -1 --pretty=format:"%Cgreen%ci %Cblue%cr%Creset" $k --`\\t"$k";done | sort
 }
 
 # https://stackoverflow.com/questions/2928584/how-to-grep-search-committed-code-in-the-git-history
