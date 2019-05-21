@@ -1,8 +1,23 @@
 #!/usr/bin/env bash
 
+function and-log {
+    pidcat "$@" \
+    -i ctxmgr -i boot-pipe -i gralloc_ranchu -i native -i chatty \
+    -i WificondControl -i VelvetNetworkClient -i android.os.Debug -i memtrack \
+    -i GInputConnectionWrapper -i EGL_emulation -i zygote -i NetworkScheduler \
+    -i hwcomposer -i FA -i Bitmap -i libc -i RenderThread \
+    -i Answers -i OpenGLRenderer
+}
+
+function adb-screen-record {
+    adb shell screenrecord /sdcard/video.mp4
+#    adb pull /sdcard/video.mp4
+#    adb shell rm /sdcard/video.mp4
+}
+
 function adb-adb-screen-pull {
 
-    dir=~/android-screenshots/
+    dir=${DIR_SCREENSHOTS}
     name=$(date).png
     name=${name// /_}
 
@@ -11,6 +26,7 @@ function adb-adb-screen-pull {
 	adb pull /sdcard/${name} ${dir}
 	adb shell rm /sdcard/${name}
 	echo ${dir}${name}
+	open ${dir}${name}
 	finish-with-success
 }
 
@@ -141,6 +157,11 @@ function android-sdk-run-emulator {
     emulator -avd $1
 }
 
+function android-sdk-run-emulator-cold {
+    validate-param "emulator name" $1
+    emulator -avd $1 -no-snapshot-load
+}
+
 function android-sdk-delete-avd {
     validate-param "emulator name" $1
     avdmanager delete avd -n "{$1}"
@@ -149,4 +170,15 @@ function android-sdk-delete-avd {
 function android-kill-avd {
     validate-param "device name, like emulator-5554" $1
     adb -s $1 emu kill
+}
+
+function android-clear-cache {
+    validate-param "package" $1
+    adb shell pm clear $1
+}
+
+function android-generate-signing-key {
+    validate-param "file name" $1
+    validate-param "alias" $2
+    keytool -genkey -v -keystore {$1}.keystore -alias $2 -keyalg RSA -keysize 2048 -validity 10000
 }
