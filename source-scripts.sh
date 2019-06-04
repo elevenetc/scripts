@@ -30,3 +30,4 @@ source $HOME/.bash_profile
 alias media-mov-to-mkv="python ${scriptsPath}/media/media-mov-to-mkv.py"
 alias fs-find-and-rename="python ${scriptsPath}/fs/fs-find-and-rename.py"
 alias android-multi-call="python ${scriptsPath}/android/adb-multi-call.py"
+alias imagecat=${scriptsPath}/fs/imgcat.sh
