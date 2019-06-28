@@ -11,6 +11,21 @@ file_path = dir_path + "/" + file_name
 temp_file_path = dir_path + "/temp.txt"
 
 
+class colors:
+    HEADER = '\033[95m'
+    OKBLUE = '\033[94m'
+    OKGREEN = '\033[92m'
+    WARNING = '\033[93m'
+    FAIL = '\033[91m'
+    ENDC = '\033[0m'
+    BOLD = '\033[1m'
+    UNDERLINE = '\033[4m'
+
+
+def c(color, text):
+    return color + text + colors.ENDC
+
+
 def write_cmd(key, cmd):
     print 'writing ' + key + ' = ' + cmd
 
@@ -49,7 +64,7 @@ def get():
     storage = load_storage()
 
     for name in storage:
-        print name + ': ' + storage[name]
+        print c(colors.OKGREEN, name) + ': ' + storage[name]
 
 
 def put(name, cmd):
@@ -58,19 +73,28 @@ def put(name, cmd):
     write_storage(storage)
 
 
-def delete(name):
-    print 'delete ' + name
+def remove(name):
+    storage = load_storage()
+    del storage[name]
+    write_storage(storage)
 
 
 if __name__ == '__main__':
 
-    action = sys.argv[1]
-
-    if action == 'get':
-        get()
-    elif action == 'put':
-        name = sys.argv[2]
-        cmd = sys.argv[3]
-        put(name, cmd)
+    if len(sys.argv) == 1:
+        print c(colors.FAIL, 'Action should be one of ') + c(colors.OKGREEN, 'get, put, remove')
     else:
-        print 'no action "' + action + '"'
+        action = sys.argv[1]
+
+        if action == 'get':
+            get()
+        elif action == 'put':
+            name = sys.argv[2]
+            cmd = sys.argv[3]
+            put(name, cmd)
+        elif action == 'remove':
+            name = sys.argv[2]
+            remove(name)
+        else:
+            print c(colors.FAIL, 'Undefined action "' + action + '" should be one of: ') + c(
+                colors.OKGREEN, 'get, put,  remove')
