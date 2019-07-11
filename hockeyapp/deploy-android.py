@@ -25,6 +25,7 @@ def upload(apk_file_path, api_token, app_id, notify=True, notes='', dsym=''):
     params['dsym'] = dsym
     params['notify'] = 2 if notify else 0
     params['notes'] = notes
+    params['status'] = 2
     files = {'ipa': open(apk_file_path, 'rb')}
     if dsym:
         files['dsym'] = open(dsym, 'rb')
