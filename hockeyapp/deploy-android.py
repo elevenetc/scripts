@@ -18,7 +18,7 @@ def upload(apk_file_path, api_token, app_id, notify=True, notes='', dsym=''):
     if dsym and not os.path.exists(dsym):
         raise Exception('Error! {} .dsym.zip file doesn\'t exist'.format(dsym))
 
-    log('Uploading {} to app-id:{}'.format(apk_file_path, app_id))
+    log('Uploading...')
 
     upload_url = 'https://rink.hockeyapp.net/api/2/apps/' + app_id + '/app_versions/upload'
     params = {}
@@ -38,6 +38,8 @@ def upload(apk_file_path, api_token, app_id, notify=True, notes='', dsym=''):
                 str(req.status_code),
                 str(req.content))
         )
+    else:
+        log('Uploading finished with {}:{}'.format(req.status_code, req.status_code))
 
 
 def log(msg):
@@ -62,17 +64,31 @@ def echo_end():
     log('End')
 
 
+def validate_param(index, name):
+    if index > len(sys.argv) - 1:
+        raise Exception('No defined param {} at {}'.format(name, index))
+    else:
+        return sys.argv[index]
+
+
 def main():
     echo_start()
 
     try:
 
-        app_id = sys.argv[1]
-        api_token = sys.argv[2]
-        apk_dir_path = sys.argv[3]
+        app_id = validate_param(1, 'app_id(str)')
+        api_token = validate_param(2, 'app_token(str)')
+        apk_dir_path = validate_param(3, 'apk_dir_path(str)')
+        notes = validate_param(4, 'notes(str)')
+        notify = True if validate_param(5, 'notify(int:1,2)') == '1' else False
+
+        log('init with app_id: {}'.format(app_id))
+        log('init with apk_dir_path: {}'.format(apk_dir_path))
+        log('init with notes: {}'.format(notes))
+        log('init with notify: {}'.format(notify))
 
         apk_file_path = resolve_apk_path(apk_dir_path)
-        upload(apk_file_path, api_token, app_id, False, 'temp-notes')
+        upload(apk_file_path, api_token, app_id, notify, notes)
     except Exception as e:
         log(str(e))
         echo_end()
