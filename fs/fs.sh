@@ -34,4 +34,4 @@ function fs-find-and-delete {
     find ./ -name $1 -delete
 }
 
-alias ll="ls -halt"
+alias ll="ls -haltr"
