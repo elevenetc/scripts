@@ -39,3 +39,15 @@ function media-mov-to-gif() {
   inputFile=$1
   ffmpeg -i ${inputFile} -r 24 -filter:v scale=720:-1 ${inputFile}.gif
 }
+
+function media-scale-image {
+  validate-param "input file" $1
+  validate-param "output file" $2
+  validate-param "scale(0-100)" $3
+
+  inputFile=$1
+  outputFile=$2
+  scale=$3
+
+  magick ${inputFile} -resize ${scale}% ${outputFile}
+}
