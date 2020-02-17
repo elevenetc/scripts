@@ -3,13 +3,6 @@ import os
 import sys
 from os.path import expanduser
 
-home = expanduser("~")
-file_name = "bookmarks.txt"
-dir_name = ".bookmarks"
-dir_path = home + "/" + dir_name
-file_path = dir_path + "/" + file_name
-temp_file_path = dir_path + "/temp.txt"
-
 
 class colors:
     HEADER = '\033[95m'
@@ -81,9 +74,20 @@ def remove(name):
 
 if __name__ == '__main__':
 
+    sync_dir = os.getenv('SYNC_DIR', None)
+
     if len(sys.argv) == 1:
         print c(colors.FAIL, 'Action should be one of ') + c(colors.OKGREEN, 'get, put, remove')
+    elif sync_dir is None:
+        print c(colors.FAIL, 'Error: ') + c(colors.OKGREEN, 'Undefined SYNC_DIR')
     else:
+
+        file_name = "bookmarks.txt"
+        dir_name = ".bookmarks"
+        dir_path = sync_dir + "/" + dir_name
+        file_path = dir_path + "/" + file_name
+        temp_file_path = dir_path + "/temp.txt"
+
         action = sys.argv[1]
 
         if action == 'get':
