@@ -32,3 +32,13 @@ alias fs-find-and-rename="python ${scriptsPath}/fs/fs-find-and-rename.py"
 alias android-multi-call="python ${scriptsPath}/android/adb-multi-call.py"
 alias bookmarks="python ${scriptsPath}/bookmarks/bookmarks.py"
 alias imagecat=${scriptsPath}/fs/imgcat.sh
+
+# ZSH plugins
+# zsh-autosuggestions: git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
+# zsh-syntax-highlighting: git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
+# ctrl+t search: git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf && ~/.fzf/install
+plugins=(
+  git
+  zsh-autosuggestions
+  zsh-syntax-highlighting
+)
