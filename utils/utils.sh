@@ -28,6 +28,14 @@ function set-env-var {
     launchctl setenv ${name} ${value}
 }
 
+function utils-time {
+    date_secs="$(date +%s)"
+    date_formatted="$(date)"
+    echo "$date_secs" | pbcopy
+    echo "${date_secs} secs"
+    echo "${date_formatted}"
+}
+
 # Samples
 
 #function checkOsSample {
