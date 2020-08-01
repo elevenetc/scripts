@@ -8,6 +8,12 @@ function git-add-and-commit {
 	git add -A; git commit -m $argv[1]
 }
 
+function git-add-commit-push() {
+  validate-param "repository path" $1
+  commitMessage=$1
+  git add -A; git commit -m ${commitMessage}; git push origin master
+}
+
 function git-branches-info {
 	git for-each-ref --sort=committerdate refs/heads/ --format='%(HEAD) %(color:yellow)%(refname:short)%(color:reset) - %(color:red)%(objectname:short)%(color:reset) - %(contents:subject) - %(authorname) (%(color:green)%(committerdate:relative)%(color:reset))'
 }
