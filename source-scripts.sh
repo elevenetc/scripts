@@ -24,6 +24,8 @@ source ${scriptsPath}/dev/dev.sh
 source ${scriptsPath}/docker/docker.sh
 source ${scriptsPath}/aws/aws.sh
 source ${scriptsPath}/bamboo/bamboo.sh
+source ${scriptsPath}/open/open.sh
+source ${scriptsPath}/cd/cd.sh
 
 source $HOME/.bash_profile
 
