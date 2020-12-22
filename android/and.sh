@@ -6,7 +6,10 @@ function and-log() {
     -i WificondControl -i VelvetNetworkClient -i android.os.Debug -i memtrack \
     -i GInputConnectionWrapper -i EGL_emulation -i zygote -i NetworkScheduler \
     -i hwcomposer -i FA -i Bitmap -i libc -i RenderThread \
-    -i Answers -i OpenGLRenderer
+    -i Answers -i OpenGLRenderer \
+    -i AudioTrack -i ACodec -i SurfaceUtils -i OMXClient -i VideoCapabilities -i SmartFittingClass \
+    -i cr_AwContents -i System.out -i SurfaceView -i libEGL -i InputTransport -i InputMethodManager \
+    -i mali_winsys -i DecorView
 }
 
 function adb-screen-record() {
