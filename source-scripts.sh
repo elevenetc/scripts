@@ -26,7 +26,9 @@ source ${scriptsPath}/aws/aws.sh
 source ${scriptsPath}/bamboo/bamboo.sh
 source ${scriptsPath}/open/open.sh
 source ${scriptsPath}/cd/cd.sh
+source ${scriptsPath}/ios/ios.sh
 
+PATH=$PATH:~/bin
 source $HOME/.bash_profile
 
 alias media-mov-to-mkv="python ${scriptsPath}/media/media-mov-to-mkv.py"
