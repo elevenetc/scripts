@@ -27,8 +27,13 @@ source ${scriptsPath}/bamboo/bamboo.sh
 source ${scriptsPath}/open/open.sh
 source ${scriptsPath}/cd/cd.sh
 source ${scriptsPath}/ios/ios.sh
+source ${scriptsPath}/postgres/postgres.sh
+
+export PATH="$HOME/.jenv/bin:$PATH"
+eval "$(jenv init -)"
 
 PATH=$PATH:~/bin
+export PATH=$PATH:~/Library/Android/sdk/platform-tools
 source $HOME/.bash_profile
 
 alias media-mov-to-mkv="python ${scriptsPath}/media/media-mov-to-mkv.py"
