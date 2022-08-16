@@ -71,3 +71,7 @@ function git-undo-commits() {
   validate-param "amount of undo commits" $1
   git reset --soft HEAD~${1}
 }
+
+function git-show-merges() {
+  git log --show-pulls
+}
