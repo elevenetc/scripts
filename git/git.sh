@@ -73,5 +73,6 @@ function git-undo-commits() {
 }
 
 function git-show-merges() {
+  # https://stackoverflow.com/a/61446843/798165
   git log --show-pulls
 }
